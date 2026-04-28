@@ -23,14 +23,14 @@
   https://realfavicongenerator.net/your-favicon-is-ready
   
   Brief Description of Goal of Code:
-This app takes a picture with your device's camera and then displays color information when a user touches (or clicks) on the image.
+This app takes a picture with your device's camera and then displays color information when a user touches (or clicks) on the image. It also predicts pH values if the user uploads a photo of the pH strip correctly.
  
   Known Issues:
   None as of now
 -->
 
 <head> 
-	 <title>A More Advanced Example App</title> 
+	 <title>pH Image Analysis App</title> 
 
 	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 
@@ -49,11 +49,11 @@ This app takes a picture with your device's camera and then displays color infor
 <body>
   
     <header class="w3-container w3-flat-carrot">
-         <h1>Color Example App</h1></div>
+         <h1>pH Image Analysis for pHydrion Jumbo</h1></div>
     </header>
 	
     <div class="w3-container">	
-      <p>This app takes a picture with your device's camera and then displays color information when a user touches (or clicks) on the image.</p>
+      <p>Take or upload a picture of your pH strip! Then tap on the strip in the image to display color information and a predicted pH value for your strip. This app only works for pH values from 4 to 8.</p>
       
         Press the "choose file" button to create or choose image file:<br>
         <input type="file" id="fileInput" STYLE="background-color: #FF6600;">
@@ -63,10 +63,11 @@ This app takes a picture with your device's camera and then displays color infor
 	</canvas><br> <!-- creates canvas for user to input image --> 
 
 	    
-      <p>Touch the picture to see an output of your RGB and HSV values.</p> <!-- message above canvas -->
+      <p>Touch the picture to see an output of your RGB, HSV, predicted color, and predicted pH values.</p> <!-- message above canvas -->
       <p id="messageDisplayArea">This area will be replaced by the RGB values once the image is tapped.</p> <!-- message above canvas -->
 	<p id="messageDisplayArea2">This area will be replaced by the HSV values once the image is tapped.</p> <!-- message above canvas -->
 	<p id="messageDisplayArea3">This area will be replaced by the color name once the image is tapped.</p> <!-- message above canvas -->
+  <p id="messageDisplayArea4">This area will be replaced by the predicted pH once the image is tapped.</p>
 
 		  </div>
 <!--    <footer class="w3-bottom w3-container w3-flat-carrot">
@@ -87,6 +88,7 @@ This app takes a picture with your device's camera and then displays color infor
    	 const message = document.getElementById('messageDisplayArea');
 	  const message2 = document.getElementById('messageDisplayArea2');
 	const message3 = document.getElementById('messageDisplayArea3');
+    const message4 = document.getElementById('messageDisplayArea4');
 
 	  
 	const fileInput = document.getElementById('fileInput');
@@ -123,7 +125,12 @@ function rgbToHsv(r, g, b) {
       if (h >= 345 && h <= 360 || h >= 0 && h <= 15) return "Red"; 
       return "Other Color";
     }
-    
+     function rgbTopH(r) {
+    pH = -0.0277*r + 9.27;
+    return pH;
+ };
+
+
     canvas.onclick = function(event) { // this creates an event that happens when a pixel on the canvas is clicked.
       const rect = canvas.getBoundingClientRect(); // returns the size of the element and its position relative to the viewport
       const x = event.clientX - rect.left; // gives the position of the click relative to the browser window
@@ -136,6 +143,7 @@ function rgbToHsv(r, g, b) {
       message.innerText = "HSV values= " + Math.round(h) + ", " + Math.round(s) + ", " + Math.round(v);
 	message2.innerText = "RGB values= " + Math.round(pixel[0]) + ", " + Math.round(pixel[1]) + ", " + Math.round(pixel[2]);
 	    message3.innerText = "Color Name= " + colorName;
+      message4.innerText = "Predicted pH = "
     }; 
 // color that is tapped and detected is shown below the selected photo
    
